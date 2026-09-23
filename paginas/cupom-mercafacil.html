@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupom Mercafácil - Support Web</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">🛠️ Support Web</a>
+            <div class="nav-links">
+                <a href="codigo-barra.html" class="nav-item">Código de Barras</a>
+                <a href="selfcheckout.html" class="nav-item">Self Checkout</a>
+                <a href="chave-nfce.html" class="nav-item">Chave NFC-e</a>
+                <a href="cupom-mercafacil.html" class="nav-item active">Cupom Mercafácil</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h2>Formatador de Cupom Mercafácil</h2>
+            <p>Cole o código de 34 dígitos — as informações e o SQL da venda são montados automaticamente.</p>
+        </div>
+
+        <div class="bloco">
+            <div class="bloco-titulo">Código do Cupom</div>
+            <div class="linha">
+                <label for="codigoCupom">Informe o código (34 dígitos):</label>
+                <input type="text" id="codigoCupom" class="mono-input" maxlength="60" autocomplete="off"
+                       placeholder="Exemplo: 0040110251717390002671330000061373">
+                <div class="contador">
+                    <span>Dígitos informados</span>
+                    <span class="chip" id="contadorCupom">0/34</span>
+                </div>
+            </div>
+            <div class="botoes">
+                <button class="btn-secondary" style="width: 100%;" onclick="limparCupom()">Limpar</button>
+            </div>
+            <div id="statusCupom" class="status"></div>
+        </div>
+
+        <div class="tool-layout">
+            <div class="form-side">
+                <div class="bloco">
+                    <div class="bloco-header">
+                        <div class="bloco-titulo">Informações do Cupom</div>
+                        <button class="btn-copy-mini" onclick="copiarInfosCupom()">📋 Copiar Infos</button>
+                    </div>
+                    <div class="campo-linha"><span class="campo-nome">ID-LOJA</span><span class="campo-valor" id="cup-loja">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">DATA</span><span class="campo-valor" id="cup-data">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">HORA</span><span class="campo-valor" id="cup-hora">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">ID-OPERADOR</span><span class="campo-valor" id="cup-operador">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">ECF</span><span class="campo-valor" id="cup-ecf">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">CUPOM</span><span class="campo-valor" id="cup-cupom">—</span></div>
+                </div>
+            </div>
+            <div class="result-side">
+                <div class="bloco">
+                    <div class="bloco-header">
+                        <div class="bloco-titulo">Código Formatado</div>
+                        <button class="btn-primary" onclick="copiarFormatadoCupom()">📋 Copiar</button>
+                    </div>
+                    <div class="saida-texto" id="saidaFormatado"><span class="vazio">Informe o código para ver o resultado.</span></div>
+                    <p class="dica">Mesmo formato que o .bat copiava para a área de transferência.</p>
+                </div>
+                <div class="bloco">
+                    <div class="bloco-header">
+                        <div class="bloco-titulo">Comando SQL</div>
+                        <button class="btn-primary" onclick="copiarSqlCupom()">📋 Copiar SQL</button>
+                    </div>
+                    <div class="saida-texto" id="saidaSql"><span class="vazio">Informe o código para gerar o SQL.</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Desenvolvido para otimização de suporte de automação comercial e PDV.</p>
+    </footer>
+    <script src="../js/util.js"></script>
+    <script src="../js/cupomMercafacil.js"></script>
+</body>
+</html>

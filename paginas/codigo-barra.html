@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador Código de Barras - Support Web</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">🛠️ Support Web</a>
+            <div class="nav-links">
+                <a href="codigo-barra.html" class="nav-item active">Código de Barras</a>
+                <a href="selfcheckout.html" class="nav-item">Self Checkout</a>
+                <a href="chave-nfce.html" class="nav-item">Chave NFC-e</a>
+                <a href="cupom-mercafacil.html" class="nav-item">Cupom Mercafácil</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h2>Gerador e Extrator de Código de Barras</h2>
+            <p>Configure a leitura de etiquetas internas e extraia as informações originais cadastradas.</p>
+        </div>
+        <div class="tool-layout">
+            <div class="form-side">
+                <div class="bloco">
+                    <div class="bloco-titulo">Dados da Etiqueta</div>
+                    <div class="linha"><label>Código Barras Etiqueta:</label><input type="text" id="codigo" class="barcode-input"></div>
+                    <div class="linha"><label>Informe o Código do Produto:</label><input type="text" id="codInformado" class="barcode-input"></div>
+                </div>
+                <div class="bloco">
+                    <div class="bloco-titulo">Configuração Produto - PDV >> Parametros</div>
+                    <div class="linha"><label>Início Cod Produto:</label><input type="number" id="iniProd" value="2" class="barcode-input"></div>
+                    <div class="linha"><label>Tamanho Cod Produto:</label><input type="number" id="tamProd" value="5" class="barcode-input"></div>
+                </div>
+                <div class="bloco">
+                    <div class="bloco-titulo">Configuração Preço/Peso - PDV >> Parametros</div>
+                    <div class="linha"><label>Início Preço/Peso Produto:</label><input type="number" id="iniPreco" value="8" class="barcode-input"></div>
+                    <div class="linha"><label>Tamanho Preço/Peso Produto:</label><input type="number" id="tamPreco" value="5" class="barcode-input"></div>
+                </div>
+                <div class="botoes">
+                    <button class="btn-secondary limpar" style="width: 100%;" onclick="limparCampos()">Limpar</button>
+                </div>
+            </div>
+            <div class="result-side">
+                <div class="bloco result-box">
+                    <div class="bloco-titulo">Resultado do Processamento</div>
+                    <div class="result-item"><span class="label">Código Produto da etiqueta:</span><div class="res-value-wrapper"><span id="resProd" class="res-badge">—</span><button class="btn-copy-mini" id="copy-resProd" onclick="copiarElementoText('resProd')">📋 Copiar</button></div></div>
+                    <div class="result-item"><span class="label">Preço/Peso Produto da etiqueta:</span><div class="res-value-wrapper"><span id="resPreco" class="res-badge">—</span><button class="btn-copy-mini" id="copy-resPreco" onclick="copiarElementoText('resPreco')">📋 Copiar</button></div></div>
+                    <div class="result-item"><span class="label">Código Item informado:</span><div class="res-value-wrapper"><span id="resCodInf" class="res-badge">—</span><button class="btn-copy-mini" id="copy-resCodInf" onclick="copiarElementoText('resCodInf')">📋 Copiar</button></div></div>
+                    <div id="statusMsg" class="status"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/util.js"></script>
+    <script src="../js/codigoBarra.js"></script>
+</body>
+</html>

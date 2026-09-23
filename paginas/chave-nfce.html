@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decodificador Chave NFC-e - Support Web</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">🛠️ Support Web</a>
+            <div class="nav-links">
+                <a href="codigo-barra.html" class="nav-item">Código de Barras</a>
+                <a href="selfcheckout.html" class="nav-item">Self Checkout</a>
+                <a href="chave-nfce.html" class="nav-item active">Chave NFC-e</a>
+                <a href="cupom-mercafacil.html" class="nav-item">Cupom Mercafácil</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h2>Decodificador Chave NFC-e</h2>
+            <p>Cole a chave de acesso de 44 dígitos — o resultado aparece na hora, sem precisar clicar em nada.</p>
+        </div>
+
+        <div class="bloco">
+            <div class="bloco-titulo">Chave de Acesso</div>
+            <div class="linha">
+                <label for="chave">Informe a chave NFC-e / NF-e (44 dígitos):</label>
+                <input type="text" id="chave" class="mono-input" maxlength="60" autocomplete="off"
+                       placeholder="Digite ou cole a chave — pontos e espaços são removidos automaticamente">
+                <div class="contador">
+                    <span>Dígitos informados</span>
+                    <span class="chip" id="contadorChave">0/44</span>
+                </div>
+            </div>
+            <div class="botoes">
+                <button class="btn-secondary" style="width: 100%;" onclick="limparChave()">Limpar</button>
+            </div>
+            <div id="statusChave" class="status"></div>
+        </div>
+
+        <div class="tool-layout">
+            <div class="form-side">
+                <div class="bloco">
+                    <div class="bloco-titulo">Campos da Chave</div>
+                    <div class="campo-linha"><span class="campo-nome">Código da UF (cUF)</span><span class="campo-valor" id="campo-cUF">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">AAMM Emissão</span><span class="campo-valor" id="campo-AAMM">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">CNPJ Emitente</span><span class="campo-valor" id="campo-CNPJ">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Modelo (mod)</span><span class="campo-valor" id="campo-MOD">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Série</span><span class="campo-valor" id="campo-SERIE">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Número NFe (nNF)</span><span class="campo-valor" id="campo-NNF">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Forma de Emissão</span><span class="campo-valor" id="campo-TPEMIS">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Código Numérico</span><span class="campo-valor" id="campo-CNF">—</span></div>
+                    <div class="campo-linha"><span class="campo-nome">Dígito Verificador</span><span class="campo-valor" id="campo-DV">—</span></div>
+                </div>
+            </div>
+            <div class="result-side">
+                <div class="bloco">
+                    <div class="bloco-header">
+                        <div class="bloco-titulo">Resultado</div>
+                        <button class="btn-primary" onclick="copiarResultadoChave()">📋 Copiar Resultado</button>
+                    </div>
+                    <div class="saida-texto" id="saida"><span class="vazio">Informe a chave para ver o resultado.</span></div>
+                    <p class="dica">O bloco acima é copiado inteiro, no mesmo formato de sempre.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Desenvolvido para otimização de suporte de automação comercial e PDV.</p>
+    </footer>
+    <script src="../js/util.js"></script>
+    <script src="../js/chaveNFCe.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Self Checkout - Support Web</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">🛠️ Support Web</a>
+            <div class="nav-links">
+                <a href="codigo-barra.html" class="nav-item">Código de Barras</a>
+                <a href="selfcheckout.html" class="nav-item active">Self Checkout</a>
+                <a href="chave-nfce.html" class="nav-item">Chave NFC-e</a>
+                <a href="cupom-mercafacil.html" class="nav-item">Cupom Mercafácil</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h2>Calculadora Automática Self Checkout</h2>
+            <p>Os cálculos e tolerâncias são computados automaticamente em tempo real.</p>
+        </div>
+        <div class="tool-layout">
+            <div class="form-side">
+                <div class="bloco">
+                    <div class="bloco-titulo">Dados Operacionais do Item</div>
+                    <div class="linha"><label>Peso Produto (Kg):</label><input type="number" step="0.001" id="pesoProduto" class="calc-input"></div>
+                    <div class="linha"><label>Preço do KG (R$):</label><input type="number" step="0.01" id="precoKg" class="calc-input"></div>
+                    <div class="linha"><label>Preço Final (R$):</label><input type="number" step="0.01" id="precoFinal" class="calc-input"></div>
+                </div>
+                <div class="bloco">
+                    <div class="bloco-titulo">Configurações de Tolerância</div>
+                    <div class="linha"><label>Tolerância Geral % (PDV >> Selfcheckout):</label><input type="number" step="0.1" id="tolGeral" class="calc-input"></div>
+                    <div class="linha"><label>Tolerância Item % (CadastroProduto):</label><input type="number" step="0.1" id="tolItem" class="calc-input"></div>
+                </div>
+                <div class="botoes">
+                    <button class="btn-secondary limpar" style="width: 100%;" onclick="limparCalculadora()">Limpar Dados</button>
+                </div>
+            </div>
+            <div class="result-side">
+                <div class="card-calculo faded" id="card-gerar-preco">
+                    <div class="card-calc-header">
+                        <span class="badge-title">GERA PREÇO</span>
+                        <span class="sub-formula">Peso * Preço do KG = Preço Final</span>
+                    </div>
+                    <div class="card-calc-body">
+                        <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-preco">—</span></div>
+                        <div class="result-display">
+                            <div class="res-box"><span class="res-title">Preço Final Calculado -</span> <span class="res-value" id="res-val-preco">—</span></div>
+                            <button class="btn-copiar" onclick="copiarTextoValue('res-val-preco')">📋 Copiar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-calculo faded" id="card-gerar-peso">
+                    <div class="card-calc-header">
+                        <span class="badge-title">GERA PESO</span>
+                        <span class="sub-formula">Preço Final / Preço KG = Peso</span>
+                    </div>
+                    <div class="card-calc-body">
+                        <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-peso">—</span></div>
+                        <div class="result-display">
+                            <div class="res-box"><span class="res-title">Peso Estimado Calculado -</span> <span class="res-value" id="res-val-peso">—</span></div>
+                            <button class="btn-copiar" onclick="copiarTextoValue('res-val-peso')">📋 Copiar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-calculo faded" id="card-tol-geral">
+                    <div class="card-calc-header">
+                        <span class="badge-title">TOLERÂNCIA GERAL</span>
+                        <span class="sub-formula">Tolerância Geral + Peso Produto = Peso aceito</span>
+                    </div>
+                    <div class="card-calc-body">
+                        <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-tol-geral">—</span></div>
+                        <div class="multi-results">
+                            <div class="result-display">
+                                <div class="res-box"><span class="res-title">Peso Aceito -</span> <span class="res-value val-medium" id="res-aceito-geral">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-aceito-geral')">📋 Copiar</button>
+                            </div>
+                            <div class="result-display border-top-dash">
+                                <div class="res-box"><span class="res-title">Peso Tolerância Margem -</span> <span class="res-value val-small" id="res-tol-geral">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-tol-geral')">📋 Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-calculo faded" id="card-tol-item">
+                    <div class="card-calc-header highlight-orange">
+                        <span class="badge-title">TOLERÂNCIA ITEM</span>
+                        <span class="sub-formula">Tolerância Item + Peso Produto = Peso aceito com tolerância Item</span>
+                    </div>
+                    <div class="card-calc-body">
+                        <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-tol-item">—</span></div>
+                        <div class="multi-results">
+                            <div class="result-display">
+                                <div class="res-box"><span class="res-title">Peso Aceito Item -</span> <span class="res-value val-medium" id="res-aceito-item">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-aceito-item')">📋 Copiar</button>
+                            </div>
+                            <div class="result-display border-top-dash">
+                                <div class="res-box"><span class="res-title">Peso Tolerância Item Margem -</span> <span class="res-value val-small" id="res-tol-item">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-tol-item')">📋 Copiar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/util.js"></script>
+    <script src="../js/calculaPeso.js"></script>
+</body>
+</html>
