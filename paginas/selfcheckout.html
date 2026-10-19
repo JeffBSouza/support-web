@@ -70,13 +70,17 @@
                 <div class="card-calculo faded" id="card-tol-geral">
                     <div class="card-calc-header">
                         <span class="badge-title">TOLERÂNCIA GERAL</span>
-                        <span class="sub-formula">Tolerância Geral + Peso Produto = Peso aceito</span>
+                        <span class="sub-formula">Peso Produto ± Tolerância Geral = faixa de peso aceita</span>
                     </div>
                     <div class="card-calc-body">
                         <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-tol-geral">—</span></div>
                         <div class="multi-results">
                             <div class="result-display">
-                                <div class="res-box"><span class="res-title">Peso Aceito -</span> <span class="res-value val-medium" id="res-aceito-geral">—</span></div>
+                                <div class="res-box"><span class="res-title">Peso Mínimo Aceito -</span> <span class="res-value val-medium" id="res-minimo-geral">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-minimo-geral')">📋 Copiar</button>
+                            </div>
+                            <div class="result-display border-top-dash">
+                                <div class="res-box"><span class="res-title">Peso Máximo Aceito -</span> <span class="res-value val-medium" id="res-aceito-geral">—</span></div>
                                 <button class="btn-copiar" onclick="copiarTextoValue('res-aceito-geral')">📋 Copiar</button>
                             </div>
                             <div class="result-display border-top-dash">
@@ -89,13 +93,17 @@
                 <div class="card-calculo faded" id="card-tol-item">
                     <div class="card-calc-header highlight-orange">
                         <span class="badge-title">TOLERÂNCIA ITEM</span>
-                        <span class="sub-formula">Tolerância Item + Peso Produto = Peso aceito com tolerância Item</span>
+                        <span class="sub-formula">Peso Produto ± Tolerância Item = faixa de peso aceita com tolerância Item</span>
                     </div>
                     <div class="card-calc-body">
                         <div class="expression-values"><span class="exp-label">Valores:</span> <span class="exp-math-real" id="formula-tol-item">—</span></div>
                         <div class="multi-results">
                             <div class="result-display">
-                                <div class="res-box"><span class="res-title">Peso Aceito Item -</span> <span class="res-value val-medium" id="res-aceito-item">—</span></div>
+                                <div class="res-box"><span class="res-title">Peso Mínimo Aceito Item -</span> <span class="res-value val-medium" id="res-minimo-item">—</span></div>
+                                <button class="btn-copiar" onclick="copiarTextoValue('res-minimo-item')">📋 Copiar</button>
+                            </div>
+                            <div class="result-display border-top-dash">
+                                <div class="res-box"><span class="res-title">Peso Máximo Aceito Item -</span> <span class="res-value val-medium" id="res-aceito-item">—</span></div>
                                 <button class="btn-copiar" onclick="copiarTextoValue('res-aceito-item')">📋 Copiar</button>
                             </div>
                             <div class="result-display border-top-dash">
