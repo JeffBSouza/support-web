@@ -23,20 +23,24 @@ function calcularTudoRealTime() {
     } else { document.getElementById('formula-peso').innerText = "—"; document.getElementById('res-val-peso').innerText = "—"; document.getElementById('card-gerar-peso').classList.add('faded'); document.getElementById('card-gerar-peso').classList.remove('active-result'); }
 
     if (!isNaN(peso) && !isNaN(tolGeral) && peso > 0 && tolGeral >= 0) {
-        const margem = peso * (tolGeral / 100); const aceito = peso + margem;
-        document.getElementById('formula-tol-geral').innerText = `${tolGeral}% + ${peso.toFixed(3)} Kg`;
-        document.getElementById('res-aceito-geral').innerText = `${aceito.toFixed(3).replace('.', ',')} Kg`;
+        const margem = peso * (tolGeral / 100);
+        const minimo = Math.max(0, peso - margem); const maximo = peso + margem;
+        document.getElementById('formula-tol-geral').innerText = `${peso.toFixed(3)} Kg ± ${tolGeral}% (${margem.toFixed(3)} Kg)`;
+        document.getElementById('res-minimo-geral').innerText = `${minimo.toFixed(3).replace('.', ',')} Kg`;
+        document.getElementById('res-aceito-geral').innerText = `${maximo.toFixed(3).replace('.', ',')} Kg`;
         document.getElementById('res-tol-geral').innerText = `${margem.toFixed(3).replace('.', ',')} Kg`;
         document.getElementById('card-tol-geral').classList.remove('faded'); document.getElementById('card-tol-geral').classList.add('active-result');
-    } else { document.getElementById('formula-tol-geral').innerText = "—"; document.getElementById('res-aceito-geral').innerText = "—"; document.getElementById('res-tol-geral').innerText = "—"; document.getElementById('card-tol-geral').classList.add('faded'); document.getElementById('card-tol-geral').classList.remove('active-result'); }
+    } else { document.getElementById('formula-tol-geral').innerText = "—"; document.getElementById('res-minimo-geral').innerText = "—"; document.getElementById('res-aceito-geral').innerText = "—"; document.getElementById('res-tol-geral').innerText = "—"; document.getElementById('card-tol-geral').classList.add('faded'); document.getElementById('card-tol-geral').classList.remove('active-result'); }
 
     if (!isNaN(peso) && !isNaN(tolItem) && peso > 0 && tolItem >= 0) {
-        const margem = peso * (tolItem / 100); const aceito = peso + margem;
-        document.getElementById('formula-tol-item').innerText = `${tolItem}% + ${peso.toFixed(3)} Kg`;
-        document.getElementById('res-aceito-item').innerText = `${aceito.toFixed(3).replace('.', ',')} Kg`;
+        const margem = peso * (tolItem / 100);
+        const minimo = Math.max(0, peso - margem); const maximo = peso + margem;
+        document.getElementById('formula-tol-item').innerText = `${peso.toFixed(3)} Kg ± ${tolItem}% (${margem.toFixed(3)} Kg)`;
+        document.getElementById('res-minimo-item').innerText = `${minimo.toFixed(3).replace('.', ',')} Kg`;
+        document.getElementById('res-aceito-item').innerText = `${maximo.toFixed(3).replace('.', ',')} Kg`;
         document.getElementById('res-tol-item').innerText = `${margem.toFixed(3).replace('.', ',')} Kg`;
         document.getElementById('card-tol-item').classList.remove('faded'); document.getElementById('card-tol-item').classList.add('active-result');
-    } else { document.getElementById('formula-tol-item').innerText = "—"; document.getElementById('res-aceito-item').innerText = "—"; document.getElementById('res-tol-item').innerText = "—"; document.getElementById('card-tol-item').classList.add('faded'); document.getElementById('card-tol-item').classList.remove('active-result'); }
+    } else { document.getElementById('formula-tol-item').innerText = "—"; document.getElementById('res-minimo-item').innerText = "—"; document.getElementById('res-aceito-item').innerText = "—"; document.getElementById('res-tol-item').innerText = "—"; document.getElementById('card-tol-item').classList.add('faded'); document.getElementById('card-tol-item').classList.remove('active-result'); }
 }
 function limparCalculadora() {
     document.querySelectorAll('.calc-input').forEach(input => input.value = ""); calcularTudoRealTime();
