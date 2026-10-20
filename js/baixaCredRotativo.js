@@ -15,6 +15,18 @@
 let textoResultado = "";
 let idsResultado = "";
 
+/* Qualquer erro inesperado aparece na tela - sem isso a pagina so parava de
+   responder e nao dava pista nenhuma do motivo. */
+window.addEventListener("error", function (evento) {
+    const status = document.getElementById("statusAnalise");
+    if (!status) return;
+    const arquivo = (evento.filename || "").split("/").pop();
+    status.innerText = "Erro na página: " + evento.message +
+        (arquivo ? " (" + arquivo + ":" + evento.lineno + ")" : "") +
+        ". Tire um print desta mensagem.";
+    status.className = "status erro";
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     ["campo158", "campo38", "campoIdent"].forEach(id => {
         document.getElementById(id).addEventListener("input", analisar);
@@ -22,6 +34,16 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("campo158").focus();
     analisar();
 });
+
+function analisar() {
+    try {
+        executarAnalise();
+    } catch (erro) {
+        const detalhe = (erro && erro.message) ? erro.message : String(erro);
+        limpar("Erro inesperado ao analisar: " + detalhe + ". Tire um print desta mensagem.", "status erro");
+        if (window.console && console.error) console.error(erro);
+    }
+}
 
 /* ----------------------------- Parsing ----------------------------- */
 
@@ -49,16 +71,44 @@ function extrairCorpoComando(linha, cmd) {
     return m ? m[1] : null;
 }
 
-function extrairTitulos(texto) {
-    const inicio = texto.indexOf("[");
-    const fim = texto.lastIndexOf("]");
-    if (inicio < 0 || fim <= inicio) return null;
-    try {
-        const lista = JSON.parse(texto.substring(inicio, fim + 1));
-        return Array.isArray(lista) ? lista : null;
-    } catch (e) {
-        return null;
+/* Acha o ] que fecha o [ da posicao indicada, ignorando colchetes dentro de strings. */
+function acharFechamento(texto, inicio) {
+    let nivel = 0, emString = false, escape = false;
+    for (let i = inicio; i < texto.length; i++) {
+        const c = texto.charAt(i);
+        if (escape) { escape = false; continue; }
+        if (c === "\\") { escape = true; continue; }
+        if (c === "\"") { emString = !emString; continue; }
+        if (emString) continue;
+        if (c === "[") nivel++;
+        else if (c === "]") { nivel--; if (nivel === 0) return i; }
     }
+    return -1;
+}
+
+/* Varre todos os [ do texto e devolve o primeiro que for um array JSON valido.
+   Precisa ser tolerante porque o log costuma trazer prefixos como [INFO] ou
+   [main] antes do retorno de verdade. */
+function extrairTitulos(texto) {
+    const posRetorno = texto.indexOf("Retorno:");
+    const origem = posRetorno >= 0 ? texto.substring(posRetorno) : texto;
+
+    let vazioEncontrado = null;
+    for (let i = 0; i < origem.length; i++) {
+        if (origem.charAt(i) !== "[") continue;
+        const fim = acharFechamento(origem, i);
+        if (fim < 0) continue;
+        let lista;
+        try {
+            lista = JSON.parse(origem.substring(i, fim + 1));
+        } catch (e) {
+            continue;
+        }
+        if (!Array.isArray(lista)) continue;
+        if (lista.length && typeof lista[0] === "object" && lista[0] !== null) return lista;
+        if (lista.length === 0 && vazioEncontrado === null) vazioEncontrado = lista;
+    }
+    return vazioEncontrado;
 }
 
 /* Valor digitado solto: aceita 490, 490.0, 490,00, R$ 1.234,56 */
@@ -100,7 +150,7 @@ function nomeBate(informado, alvo) {
 
 /* ----------------------------- Analise ----------------------------- */
 
-function analisar() {
+function executarAnalise() {
     const texto158 = document.getElementById("campo158").value.trim();
     const texto38 = document.getElementById("campo38").value.trim();
     const ident = document.getElementById("campoIdent").value.trim();
@@ -113,8 +163,12 @@ function analisar() {
     /* ---- campo 1: comando 158 ---- */
     const linha158 = acharLinhaComando(texto158, "158");
     const titulos = extrairTitulos(texto158);
-    if (!titulos || titulos.length === 0) {
-        limpar("Campo 1: não encontrei a lista de títulos do comando 158. Cole a linha inteira do log, incluindo o trecho \"Retorno: 158|[...]\".", "status erro");
+    if (!titulos) {
+        limpar("Campo 1: não encontrei a lista de títulos do comando 158. Cole a linha inteira do log, incluindo o trecho \"Retorno: 158|[...]\" — e confira se o colchete final não ficou de fora.", "status erro");
+        return;
+    }
+    if (titulos.length === 0) {
+        limpar("Campo 1: o comando 158 retornou a lista vazia — este cliente não tinha nenhum título em aberto no momento da consulta.", "status aviso");
         return;
     }
     const carimbo = extrairCarimbo(linha158);
