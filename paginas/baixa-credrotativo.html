@@ -22,7 +22,7 @@
     <div class="container">
         <div class="page-header">
             <h2>Identifica Baixa CredRotativo</h2>
-            <p>Cole os comandos do log e descubra quais títulos provavelmente receberam a baixa do pagamento.</p>
+            <p>Cole os comandos do log, clique em Gerar análise e veja quais títulos provavelmente receberam a baixa do pagamento. Atalho: Ctrl+Enter.</p>
         </div>
 
         <div class="bloco">
@@ -31,12 +31,14 @@
                 <label for="campo158">1 · Comando 158 — consulta dos títulos em aberto:</label>
                 <textarea id="campo158" rows="4" class="mono-input" autocomplete="off"
                           spellcheck="false" autocapitalize="off" autocorrect="off" wrap="soft"
+                          data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"
                           placeholder="Cole a linha inteira do log, incluindo o trecho Retorno: 158|[{...}]"></textarea>
             </div>
             <div class="linha">
                 <label for="campo38">2 · Comando 38 — recibo do pagamento (ou apenas o valor pago):</label>
                 <textarea id="campo38" rows="3" class="mono-input" autocomplete="off"
                           spellcheck="false" autocapitalize="off" autocorrect="off" wrap="soft"
+                          data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false"
                           placeholder="Cole a linha do comando 38, ou digite só o valor — ex.: 490,00"></textarea>
             </div>
             <div class="linha">
@@ -45,9 +47,10 @@
                        placeholder="Confere se os dois comandos são da mesma pessoa">
             </div>
             <div class="botoes">
-                <button class="btn-secondary" style="width: 100%;" onclick="limparBaixa()">Limpar</button>
+                <button class="btn-primary" id="btnGerar" style="flex: 2;">▶ Gerar análise</button>
+                <button class="btn-secondary" style="flex: 1;" onclick="limparBaixa()">Limpar</button>
             </div>
-            <div id="statusAnalise" class="status">Preencha os três campos para iniciar a análise.</div>
+            <div id="statusAnalise" class="status">Preencha os três campos e clique em Gerar análise.</div>
         </div>
 
         <div id="blocoResultado" class="faded">
@@ -73,7 +76,7 @@
                                 <button class="btn-copy-mini" onclick="copiarIdsBaixa()">📋 Só os IDs</button>
                             </div>
                         </div>
-                        <div class="saida-texto" id="saida"><span class="vazio">O resultado aparece aqui assim que os três campos estiverem preenchidos.</span></div>
+                        <div class="saida-texto" id="saida"><span class="vazio">O resultado aparece aqui ao clicar em Gerar análise.</span></div>
                         <p class="dica">"Só os IDs" copia no formato <code>5448,5691</code>, pronto para um <code>IN (...)</code>.</p>
                     </div>
                 </div>

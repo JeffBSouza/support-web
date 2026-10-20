@@ -14,7 +14,7 @@ Sucessor do `codebar-etiqueta`, agora com quatro ferramentas no mesmo painel.
 | 🎟️ **Cupom Mercafácil** | Decodifica o código de 34 dígitos do cupom, monta a linha formatada e gera o SQL de consulta da venda. |
 | 💳 **Identifica Baixa CredRotativo** | A partir dos comandos 158 e 38 do log, aponta quais títulos de crédito rotativo receberam a baixa do pagamento e quanto cada um recebeu. |
 
-Todas as ferramentas processam **enquanto você digita** — não há botão "Gerar". Os resultados têm botão de copiar.
+As ferramentas processam **enquanto você digita** — exceto a de Baixa CredRotativo, que recebe blocos grandes de log colados e por isso roda só ao clicar em **Gerar análise** (ou `Ctrl+Enter`). Os resultados têm botão de copiar.
 
 ## Estrutura
 

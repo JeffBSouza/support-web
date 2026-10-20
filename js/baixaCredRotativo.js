@@ -28,12 +28,31 @@ window.addEventListener("error", function (evento) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("btnGerar").addEventListener("click", analisar);
+
+    /* Diferente das outras paginas, aqui a analise NAO roda sozinha: os campos
+       recebem blocos grandes de log colados, e nada deve disparar no momento
+       da colagem. Ao mexer nos campos so marcamos o resultado como vencido. */
     ["campo158", "campo38", "campoIdent"].forEach(id => {
-        document.getElementById(id).addEventListener("input", analisar);
+        const campo = document.getElementById(id);
+        campo.addEventListener("input", marcarPendente);
+        campo.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && e.key === "Enter") {
+                e.preventDefault();
+                analisar();
+            }
+        });
     });
+
     document.getElementById("campo158").focus();
-    analisar();
 });
+
+function marcarPendente() {
+    const status = document.getElementById("statusAnalise");
+    status.innerText = "Dados alterados — clique em Gerar análise.";
+    status.className = "status";
+    document.getElementById("blocoResultado").classList.add("faded");
+}
 
 function analisar() {
     try {
@@ -71,42 +90,72 @@ function extrairCorpoComando(linha, cmd) {
     return m ? m[1] : null;
 }
 
-/* Acha o ] que fecha o [ da posicao indicada, ignorando colchetes dentro de strings. */
-function acharFechamento(texto, inicio) {
-    let nivel = 0, emString = false, escape = false;
+/* Teto do texto aceito e do trabalho de varredura. Sem isso, colar um trecho
+   grande do log faz a pagina congelar: a busca do array era quadratica. */
+const LIMITE_TEXTO = 1048576;        /* 1 MB por campo */
+const MAX_TENTATIVAS = 40;           /* candidatos a array JSON testados */
+const ORCAMENTO_VARREDURA = 2000000; /* caracteres percorridos no total */
+
+/* Primeiro caractere nao branco a partir da posicao, olhando so um pedaco curto. */
+function proximoNaoBranco(texto, inicio) {
+    const fim = Math.min(texto.length, inicio + 40);
+    for (let i = inicio; i < fim; i++) {
+        const c = texto.charAt(i);
+        if (c !== " " && c !== "\t" && c !== "\n" && c !== "\r") return c;
+    }
+    return "";
+}
+
+/* Acha o ] que fecha o [ da posicao indicada, ignorando colchetes dentro de
+   strings. Para quando estoura o orcamento, para nao varrer o texto inteiro
+   atras de um colchete que nunca fecha. */
+function acharFechamento(texto, inicio, orcamento) {
+    let nivel = 0, emString = false, escape = false, percorrido = 0;
     for (let i = inicio; i < texto.length; i++) {
+        if (++percorrido > orcamento) return { fim: -1, percorrido: percorrido };
         const c = texto.charAt(i);
         if (escape) { escape = false; continue; }
         if (c === "\\") { escape = true; continue; }
         if (c === "\"") { emString = !emString; continue; }
         if (emString) continue;
         if (c === "[") nivel++;
-        else if (c === "]") { nivel--; if (nivel === 0) return i; }
+        else if (c === "]") { nivel--; if (nivel === 0) return { fim: i, percorrido: percorrido }; }
     }
-    return -1;
+    return { fim: -1, percorrido: percorrido };
 }
 
-/* Varre todos os [ do texto e devolve o primeiro que for um array JSON valido.
-   Precisa ser tolerante porque o log costuma trazer prefixos como [INFO] ou
-   [main] antes do retorno de verdade. */
+/* Devolve o primeiro array JSON de objetos encontrado depois de "Retorno:".
+   So testa colchetes que abrem um array de verdade - "[{" ou "[]" - o que
+   descarta de imediato os [INFO], [main] e afins que enchem o log. */
 function extrairTitulos(texto) {
     const posRetorno = texto.indexOf("Retorno:");
     const origem = posRetorno >= 0 ? texto.substring(posRetorno) : texto;
 
     let vazioEncontrado = null;
-    for (let i = 0; i < origem.length; i++) {
-        if (origem.charAt(i) !== "[") continue;
-        const fim = acharFechamento(origem, i);
-        if (fim < 0) continue;
-        let lista;
-        try {
-            lista = JSON.parse(origem.substring(i, fim + 1));
-        } catch (e) {
-            continue;
+    let tentativas = 0;
+    let orcamento = ORCAMENTO_VARREDURA;
+    let i = origem.indexOf("[");
+
+    while (i >= 0 && tentativas < MAX_TENTATIVAS && orcamento > 0) {
+        const abertura = proximoNaoBranco(origem, i + 1);
+        if (abertura === "{" || abertura === "]") {
+            tentativas++;
+            const r = acharFechamento(origem, i, orcamento);
+            orcamento -= r.percorrido;
+            if (r.fim >= 0) {
+                let lista = null;
+                try {
+                    lista = JSON.parse(origem.substring(i, r.fim + 1));
+                } catch (e) {
+                    lista = null;
+                }
+                if (Array.isArray(lista)) {
+                    if (lista.length && typeof lista[0] === "object" && lista[0] !== null) return lista;
+                    if (lista.length === 0 && vazioEncontrado === null) vazioEncontrado = lista;
+                }
+            }
         }
-        if (!Array.isArray(lista)) continue;
-        if (lista.length && typeof lista[0] === "object" && lista[0] !== null) return lista;
-        if (lista.length === 0 && vazioEncontrado === null) vazioEncontrado = lista;
+        i = origem.indexOf("[", i + 1);
     }
     return vazioEncontrado;
 }
@@ -156,7 +205,14 @@ function executarAnalise() {
     const ident = document.getElementById("campoIdent").value.trim();
 
     if (!texto158 || !texto38 || !ident) {
-        limpar("Preencha os três campos para iniciar a análise.", "status");
+        limpar("Preencha os três campos e clique em Gerar análise.", "status");
+        return;
+    }
+
+    const grande = [["1", texto158], ["2", texto38]].find(c => c[1].length > LIMITE_TEXTO);
+    if (grande) {
+        limpar("Campo " + grande[0] + ": você colou " + Math.round(grande[1].length / 1024) +
+            " KB. Cole apenas a linha do comando, não o trecho inteiro do log.", "status erro");
         return;
     }
 
@@ -418,7 +474,7 @@ function limpar(mensagem, classe) {
     idsResultado = "";
     document.getElementById("resumo").innerHTML = "";
     document.getElementById("listaTitulos").innerHTML = "";
-    document.getElementById("saida").innerHTML = '<span class="vazio">O resultado aparece aqui assim que os três campos estiverem preenchidos.</span>';
+    document.getElementById("saida").innerHTML = '<span class="vazio">O resultado aparece aqui ao clicar em Gerar análise.</span>';
     document.getElementById("carimboBaixa").innerText = "—";
     document.getElementById("blocoResultado").classList.add("faded");
     const status = document.getElementById("statusAnalise");
