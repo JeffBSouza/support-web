@@ -38,6 +38,15 @@ support-web/
     └── baixa-credrotativo.html
 ```
 
+## Cache do navegador
+
+Os links de CSS e JS nas páginas carregam um número de versão — `style.css?v=20261020`.
+Sem ele o navegador serve a versão antiga do arquivo mesmo depois da publicação, e a
+página roda código velho sem dar nenhum sinal.
+
+**Ao alterar qualquer arquivo de `css/` ou `js/`, troque esse número em todas as páginas**
+(basta usar a data do dia). Caso contrário quem já abriu o site continuará com a versão anterior.
+
 ## Como publicar no GitHub Pages
 
 Em **Settings → Pages**, escolha *Deploy from a branch*, branch `main` e pasta `/ (root)`.
