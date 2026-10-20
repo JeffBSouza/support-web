@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identifica Baixa CredRotativo - Support Web</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">🛠️ Support Web</a>
+            <div class="nav-links">
+                <a href="codigo-barra.html" class="nav-item">Código de Barras</a>
+                <a href="selfcheckout.html" class="nav-item">Self Checkout</a>
+                <a href="chave-nfce.html" class="nav-item">Chave NFC-e</a>
+                <a href="cupom-mercafacil.html" class="nav-item">Cupom Mercafácil</a>
+                <a href="baixa-credrotativo.html" class="nav-item active">Baixa CredRotativo</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h2>Identifica Baixa CredRotativo</h2>
+            <p>Cole os comandos do log e descubra quais títulos provavelmente receberam a baixa do pagamento.</p>
+        </div>
+
+        <div class="bloco">
+            <div class="bloco-titulo">Dados do Log</div>
+            <div class="linha">
+                <label for="campo158">1 · Comando 158 — consulta dos títulos em aberto:</label>
+                <textarea id="campo158" rows="4" class="mono-input" autocomplete="off"
+                          placeholder="Cole a linha inteira do log, incluindo o trecho Retorno: 158|[{...}]"></textarea>
+            </div>
+            <div class="linha">
+                <label for="campo38">2 · Comando 38 — recibo do pagamento (ou apenas o valor pago):</label>
+                <textarea id="campo38" rows="3" class="mono-input" autocomplete="off"
+                          placeholder="Cole a linha do comando 38, ou digite só o valor — ex.: 490,00"></textarea>
+            </div>
+            <div class="linha">
+                <label for="campoIdent">3 · CPF, código ou nome do cliente:</label>
+                <input type="text" id="campoIdent" autocomplete="off"
+                       placeholder="Confere se os dois comandos são da mesma pessoa">
+            </div>
+            <div class="botoes">
+                <button class="btn-secondary" style="width: 100%;" onclick="limparBaixa()">Limpar</button>
+            </div>
+            <div id="statusAnalise" class="status">Preencha os três campos para iniciar a análise.</div>
+        </div>
+
+        <div id="blocoResultado" class="faded">
+            <div class="tool-layout">
+                <div class="form-side">
+                    <div class="bloco">
+                        <div class="bloco-titulo">Resumo</div>
+                        <div id="resumo"></div>
+                    </div>
+                    <div id="listaTitulos"></div>
+                    <div class="bloco">
+                        <div class="bloco-titulo">Data, hora, ecf e idloja da Baixa</div>
+                        <div class="carimbo" id="carimboBaixa">—</div>
+                        <p class="observacao">OBSERVAÇÃO: a data da baixa pode variar conforme o dia que o registro subiu do concentrador para o PDV</p>
+                    </div>
+                </div>
+                <div class="result-side">
+                    <div class="bloco">
+                        <div class="bloco-header">
+                            <div class="bloco-titulo">Resultado</div>
+                            <div class="acoes-copiar">
+                                <button class="btn-primary" onclick="copiarResultadoBaixa()">📋 Copiar Resultado</button>
+                                <button class="btn-copy-mini" onclick="copiarIdsBaixa()">📋 Só os IDs</button>
+                            </div>
+                        </div>
+                        <div class="saida-texto" id="saida"><span class="vazio">O resultado aparece aqui assim que os três campos estiverem preenchidos.</span></div>
+                        <p class="dica">"Só os IDs" copia no formato <code>5448,5691</code>, pronto para um <code>IN (...)</code>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>Desenvolvido para otimização de suporte de automação comercial e PDV.</p>
+    </footer>
+    <script src="../js/util.js"></script>
+    <script src="../js/baixaCredRotativo.js"></script>
+</body>
+</html>

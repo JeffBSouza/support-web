@@ -12,6 +12,7 @@ Sucessor do `codebar-etiqueta`, agora com quatro ferramentas no mesmo painel.
 | 🛒 **Calculadora Self Checkout** | Calcula preço, peso estimado e as margens de tolerância geral e por item, em tempo real. |
 | 🧾 **Decodificador Chave NFC-e** | Abre a chave de acesso de 44 dígitos em todos os campos (cUF, AAMM, CNPJ, modelo, série, nNF, tpEmis, cNF, DV) e valida o dígito verificador. |
 | 🎟️ **Cupom Mercafácil** | Decodifica o código de 34 dígitos do cupom, monta a linha formatada e gera o SQL de consulta da venda. |
+| 💳 **Identifica Baixa CredRotativo** | A partir dos comandos 158 e 38 do log, aponta quais títulos de crédito rotativo receberam a baixa do pagamento e quanto cada um recebeu. |
 
 Todas as ferramentas processam **enquanto você digita** — não há botão "Gerar". Os resultados têm botão de copiar.
 
@@ -27,12 +28,14 @@ support-web/
 │   ├── codigoBarra.js
 │   ├── calculaPeso.js
 │   ├── chaveNFCe.js
-│   └── cupomMercafacil.js
+│   ├── cupomMercafacil.js
+│   └── baixaCredRotativo.js
 └── paginas/
     ├── codigo-barra.html
     ├── selfcheckout.html
     ├── chave-nfce.html
-    └── cupom-mercafacil.html
+    ├── cupom-mercafacil.html
+    └── baixa-credrotativo.html
 ```
 
 ## Como publicar no GitHub Pages

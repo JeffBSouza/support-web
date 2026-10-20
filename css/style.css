@@ -100,3 +100,17 @@ body { background-color: var(--bg-main); color: var(--text-main); padding-bottom
 #toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(150%); background: var(--bg-navbar); color: white; padding: 0.7rem 1.2rem; border-radius: 6px; font-size: 0.9rem; box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: transform 0.25s ease; z-index: 999; max-width: 90vw; text-align: center; }
 #toast.show { transform: translateX(-50%) translateY(0); }
 #toast.erro { background: var(--danger); }
+
+/* ---------- Identifica Baixa CredRotativo ---------- */
+.linha textarea { width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; resize: vertical; font-size: 0.85rem; line-height: 1.45; }
+.faded { opacity: var(--faded-opacity); filter: grayscale(1); pointer-events: none; transition: all 0.25s; }
+.acoes-copiar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.titulo-card { border-left: 4px solid var(--success); }
+.titulo-card.parcial { border-left-color: var(--warning); background: #fffbeb; }
+.titulo-card.quitado { background: #f0fdf4; }
+.tag { font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+.tag-quitado { background: var(--success-light); color: var(--success); }
+.tag-parcial { background: var(--warning-light); color: var(--warning); }
+.carimbo { font-family: monospace; font-weight: bold; font-size: 1.05rem; color: #0f172a; background: #f1f5f9; padding: 0.65rem; border-radius: 4px; text-align: center; }
+.observacao { font-size: 0.8rem; color: var(--warning); background: var(--warning-light); border: 1px solid #fde68a; border-radius: 4px; padding: 0.6rem; margin-top: 0.75rem; line-height: 1.45; }
+.dica code { background: #f1f5f9; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.78rem; }
